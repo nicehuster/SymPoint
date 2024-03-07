@@ -1,0 +1,114 @@
+model:
+  in_channels: 9
+  semantic_classes: 35
+  #decoder
+  num_decoders: 3
+  dropout: 0.0
+  pre_norm: False
+  num_heads: 8
+  shared_decoder: True
+  dim_feedforward: 512
+  hidden_dim: 256
+  num_queries: 500
+  gauss_scale: 1.0
+  normalize_pos_enc: False
+  #dn
+  scalar: 1
+  dn_mask_noise_scale: 0.0
+  dn_label_noise_ratio: 0.2
+
+matcher:
+  cost_class: 2.
+  cost_mask: 5.
+  cost_dice: 5.
+  num_points: -1
+
+criterion: 
+  num_classes: 35
+  eos_coef: 0.1
+  losses:
+    - "labels"
+    - "masks"
+  ignore_label: -1
+  class_weights: -1
+  num_points: -1
+  contrast: 
+    num_classes: 36 # bg+fg
+    stage: "Ua"
+    num_layers: 5
+    ftype: "f_out"
+    dist: "l2"
+    pos: "cnt"
+    contrast_func: "softnn"
+    sample: "label"
+    temperature: 2.0
+    weight: 8.0
+  
+data:
+  train:
+    type: 'svg'
+    data_root: 'dataset/train/jsons'
+    repeat: 5
+    split: "train"
+    data_norm: "mean"
+    aug: 
+      aug_prob: 0.5
+      hflip: True
+      vflip: True
+
+      rotate: 
+        enable: False
+        angle: [-180,180]
+      rotate2: True
+      
+      scale: 
+        enable: True
+        ratio: [0.5,1.5]
+      
+      shift: 
+        enable: True
+        scale: [-0.5,0.5]
+
+      cutmix: 
+        enable: True
+        queueK: 32
+        relative_shift: [-0.5,0.5]
+
+  test:
+    type: 'svg'
+    data_root: 'dataset/test/jsons'
+    repeat: 1
+    split: "test"
+    data_norm: "mean"
+    aug: False
+
+dataloader:
+  train:
+    batch_size: 2
+    num_workers: 2
+  test:
+    batch_size: 1
+    num_workers: 1
+
+optimizer:
+  type: 'AdamW'
+  lr: 0.0001
+  weight_decay: 0.0001
+  weight_decay_embed: 0.0
+  decoder_multiplier: 1.0
+  clip_gradients_enabled: True
+  clip_gradients_type: "full_model"
+  clip_gradients_norm_type: 2.0
+  clip_gradients_value: 0.01
+
+scheduler:
+  type: 'step'
+  lr_decay: 0.1
+  lr_decay_epochs: [18,24]
+
+fp16: False
+epochs: 50
+step_epoch: 30
+save_freq: 10
+pretrain: '' # We can load pretrain of ScanNetV2 or train from scratch
+work_dir: ''
