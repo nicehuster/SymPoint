@@ -6,7 +6,7 @@ via Point-based Representation</h2>
 
 
 ## 📋News
-- **[2023/03/07]** 📢Our code and model weight is release.
+- **[2023/03/07]** 📢Our code and model [weight](https://1drv.ms/f/c/95a3500025f26528/Est7Ia9ty65MkK5bFeJISrcBunuRAM1yXeBM3ICFOg_JYQ?e=LrkpKf) is release.
 - **[2024/03/01]** 📢Our paper is released in [Arxiv](https://arxiv.org/pdf/2401.10556.pdf), and camera ready version is updated. 
 - **[2024/01/16]** 🎊SymPoint is accepted by **ICLR 2024**.
 
